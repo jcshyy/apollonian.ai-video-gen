@@ -1,0 +1,18 @@
+# virtual env
+.venv/
+
+# python
+__pycache__/
+*.pyc
+
+# env variables
+.env
+
+# generated outputs
+data/audio/
+data/videos/
+
+# mac/windows junk
+.DS_Store
+
+assets/*.mp4
