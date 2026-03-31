@@ -13,6 +13,7 @@ EDGE_VOICE = "en-US-AriaNeural"
 USE_GEMINI = True
 
 
+
 def _save_pcm_as_wav(pcm_data: bytes, output_path: str, sample_rate: int = 24000) -> None:
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -25,6 +26,8 @@ def _save_pcm_as_wav(pcm_data: bytes, output_path: str, sample_rate: int = 24000
 
 
 def generate_audio_gemini(script: str, output_path: str = "data/audio/output.wav") -> str:
+    print("word count:", len(script.split()))
+
     if not script.strip():
         raise ValueError("Script is empty.")
 
@@ -37,13 +40,8 @@ def generate_audio_gemini(script: str, output_path: str = "data/audio/output.wav
     client = genai.Client(api_key=api_key)
 
     prompt = f"""
-Read this exactly as written in a calm, warm, grounding meditation voice.
-
-IMPORTANT:
-- Speak slowly
-- Add a short pause after each sentence
-- Add a longer pause after questions or instructions
-- Let key phrases breathe before continuing
+Read this exactly as written in a calm, warm, grounding meditation voice. And add short and long 
+pauses when needed.
 
 
 {script}

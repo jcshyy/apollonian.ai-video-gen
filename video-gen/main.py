@@ -2,6 +2,8 @@ from pipeline.generate_script import generate_script
 from pipeline.generate_audio import generate_audio
 from pipeline.generate_visuals import generate_visuals
 from pipeline.assemble_video import assemble_video
+from dotenv import load_dotenv
+
 
 
 EXERCISE_OPTIONS = {
@@ -13,6 +15,8 @@ EXERCISE_OPTIONS = {
 
 
 def run_pipeline():
+    load_dotenv()
+
     category = "anxiety"
     topic = input("Enter the topic: ").strip()
 
@@ -43,13 +47,18 @@ def run_pipeline():
     print(f"Audio saved at: {audio_path}")
 
     print("\n[3] Generating visuals...")
-    visual_path = generate_visuals(script)
-    print(f"Visual saved at: {visual_path}")
+    visual_data = generate_visuals(audio_path=audio_path, min_clip_duration=30)
+    print(f"Downloaded {len(visual_data['clips'])} clips")
+    print(f"Total visual duration: {visual_data['total_duration']}s")
+
+    for clip in visual_data["clips"]:
+        print(f"Clip saved at: {clip['video_path']}")
 
     print("\n[4] Assembling video...")
-    video_path = assemble_video(audio_path, visual_path)
-    print(f"\nDone. Final video saved at: {video_path}")
+    final_video_path = assemble_video(audio_path, visual_data)
+    print(f"\nDone. Final video saved at: {final_video_path}")
 
+    return final_video_path
 
 if __name__ == "__main__":
     run_pipeline()
